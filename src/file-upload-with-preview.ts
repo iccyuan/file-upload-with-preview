@@ -156,10 +156,7 @@ export class FileUploadWithPreview {
    * Hidden input
    */
   inputHidden: HTMLInputElement;
-  /**
-   * Visible input
-   */
-  inputVisible: Element;
+ 
   options: RequiredOptions = {
     accept: '*',
     images: {
@@ -219,12 +216,6 @@ export class FileUploadWithPreview {
 
     this.el = el;
     this.el.innerHTML += `
-    <div class="label-container">
-      <label>${this.options.text.label}</label>
-      <a class="clear-button" href="javascript:void(0)" title="Clear Image">
-        &times;
-      </a>
-    </div>
     <label class="input-container">
       <input
         accept="${this.options.accept}"
@@ -234,22 +225,19 @@ export class FileUploadWithPreview {
         ${this.options.multiple ? 'multiple' : ''}
         type="file"
       />
-      <span class="input-visible"></span>
+      <a class="clear-button" href="javascript:void(0)" title="Clear Image"/>
     </label>
     <div class="image-preview"></div>
   `;
 
     const inputHidden = this.el.querySelector('.custom-file-container .input-hidden');
-    const inputVisible = this.el.querySelector('.custom-file-container .input-visible');
     const imagePreview = this.el.querySelector('.custom-file-container .image-preview');
     const clearButton = this.el.querySelector('.custom-file-container .clear-button');
     const allRequiredElementsFound =
-      inputHidden != null && inputVisible != null && imagePreview != null && clearButton != null;
+      inputHidden != null && imagePreview != null && clearButton != null;
 
     if (allRequiredElementsFound) {
       this.inputHidden = inputHidden as HTMLInputElement;
-      this.inputVisible = inputVisible;
-      this.inputVisible.innerHTML = this.options.text.chooseFile;
       this.imagePreview = imagePreview as HTMLDivElement;
       this.clearButton = clearButton;
     } else {
@@ -268,7 +256,6 @@ export class FileUploadWithPreview {
     this.options.images.backgroundImage = backgroundImage ?? this.options.images.backgroundImage;
 
     this.addImagesFromPath(this.options.presetFiles);
-    this.addBrowseButton(this.options.text.browse);
     this.imagePreview.style.backgroundImage = `url("${this.options.images.baseImage}")`;
     this.bindClickEvents();
   }
@@ -418,14 +405,6 @@ export class FileUploadWithPreview {
   }
 
   addFileToPreviewPanel(file: File) {
-    if (this.cachedFileArray.length === 0) {
-      this.inputVisible.innerHTML = this.options.text.chooseFile;
-    } else if (this.cachedFileArray.length === 1) {
-      this.inputVisible.textContent = file.name.split(UNIQUE_ID_IDENTIFIER)[0];
-    } else {
-      this.inputVisible.innerHTML = `${this.cachedFileArray.length} ${this.options.text.selectedCount}`;
-    }
-
     const reader = new FileReader();
     reader.readAsDataURL(file);
 
@@ -523,12 +502,7 @@ export class FileUploadWithPreview {
 
     // 更新可见输入以反映新的文件计数
     if (this.cachedFileArray.length === 0) {
-      this.inputVisible.innerHTML = this.options.text.chooseFile;
       this.imagePreview.style.backgroundImage = `url("${this.options.images.baseImage}")`;
-    } else if (this.cachedFileArray.length === 1) {
-      this.inputVisible.textContent = this.cachedFileArray[0].name.split(UNIQUE_ID_IDENTIFIER)[0];
-    } else {
-      this.inputVisible.innerHTML = `${this.cachedFileArray.length} ${this.options.text.selectedCount}`;
     }
     // 分发图片删除事件
     const eventPayload: ImageDeletedEvent = {
@@ -565,9 +539,7 @@ export class FileUploadWithPreview {
     }, timeoutWait);
   }
 
-  addBrowseButton(text: string) {
-    this.inputVisible.innerHTML += `<span class="browse-button">${text}</span>`;
-  }
+
 
   emulateInputSelection() {
     this.inputHidden.click();
@@ -575,8 +547,6 @@ export class FileUploadWithPreview {
 
   resetPreviewPanel() {
     this.inputHidden.value = '';
-    this.inputVisible.innerHTML = this.options.text.chooseFile;
-    this.addBrowseButton(this.options.text.browse);
     this.imagePreview.innerHTML = '';
     this.cachedFileArray = [];
   }
