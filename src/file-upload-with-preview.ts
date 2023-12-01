@@ -1,3 +1,4 @@
+import internal from 'stream';
 import { Events } from './constants/events';
 import { UNIQUE_ID_IDENTIFIER } from './constants/file';
 import {
@@ -156,7 +157,7 @@ export class FileUploadWithPreview {
    * Hidden input
    */
   inputHidden: HTMLInputElement;
- 
+
   options: RequiredOptions = {
     accept: '*',
     images: {
@@ -328,7 +329,7 @@ export class FileUploadWithPreview {
       const target = e.target as HTMLElement;
 
       // 如果点击的是移除图标，则处理移除逻辑，但不触发文件选择
-      if (target.matches('.image-preview-item-clear-icon')) {
+      if (target.matches('.custom-file-container .image-preview-item-clear-icon')) {
         const fileName = target.getAttribute('data-upload-name');
         const selectedFileIndex = this.cachedFileArray.findIndex(({ name }) => name === fileName);
         this.deleteFileAtIndex(selectedFileIndex);
@@ -457,13 +458,16 @@ export class FileUploadWithPreview {
       }
 
       this.imagePreview.innerHTML += `
-        <div
-          class="image-preview-item"
-          data-upload-name="${file.name}"
-          style="background-image: url('${backgroundImage}'); "
-        >
-          ${this.options.showDeleteButtonOnImages ? imageClearContent(file.name) : undefined}
-        </div>
+      <div
+      class="image-preview-item"
+      data-upload-name="${file.name}"
+      style="background-image: url('${backgroundImage}'); "
+    >
+      ${this.options.showDeleteButtonOnImages ? imageClearContent(file.name) : undefined}
+      <div class="image-preview-item-progress-bar-container">
+        <div class="image-preview-item-progress-bar" data-upload-name="${file.name}-progress"></div>
+      </div>
+    </div>
       `;
     };
   }
@@ -539,6 +543,12 @@ export class FileUploadWithPreview {
     }, timeoutWait);
   }
 
+  setPorgress(file: File, progress:number) {
+    const progressBar = this.imagePreview.querySelector(`.image-preview-item-progress-bar[data-upload-name="${file.name}-progress"]`) as HTMLElement;
+    if (progressBar && progress < 100) {
+      progressBar.style.width = `${progress}%`;
+    }
+  }
 
 
   emulateInputSelection() {

@@ -50,6 +50,16 @@ window.addEventListener(Events.IMAGE_ADDED, (e: Event) => {
   const { detail } = e as unknown as ImageAddedEvent;
 
   console.log('detail', detail);
+
+  let progress = 0;
+  const interval = setInterval(() => {
+    progress += 10;
+    if (progress < 100) {
+       secondUpload.setPorgress(detail.cachedFileArray[0],progress)
+    } else {
+      clearInterval(interval);
+    }
+  }, 1000); // 每200ms增加10%的进度
 });
 
 window.addEventListener(Events.IMAGE_DELETED, (e: Event) => {
