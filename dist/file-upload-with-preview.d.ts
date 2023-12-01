@@ -112,10 +112,6 @@ export declare class FileUploadWithPreview {
      */
     cachedFileArray: File[];
     /**
-     * Button to reset the instance
-     */
-    clearButton: Element;
-    /**
      * Main container for the instance
      */
     el: Element;

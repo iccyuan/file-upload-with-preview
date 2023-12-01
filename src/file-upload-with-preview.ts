@@ -14,12 +14,7 @@ import {
   DEFAULT_FILES_SELECTED_TEXT,
   DEFAULT_LABEL_TEXT,
 } from './constants/text';
-import {
-  ClearButtonClickedEvent,
-  ImageAddedEvent,
-  ImageDeletedEvent,
-  ImageMultiItemClickedEvent,
-} from './types/events';
+import { ImageAddedEvent, ImageDeletedEvent, ImageMultiItemClickedEvent } from './types/events';
 import { generateUniqueId } from './utils/file';
 
 export interface Text {
@@ -141,10 +136,6 @@ export class FileUploadWithPreview {
    */
   cachedFileArray: File[];
   /**
-   * Button to reset the instance
-   */
-  clearButton: Element;
-  /**
    * Main container for the instance
    */
   el: Element;
@@ -225,21 +216,17 @@ export class FileUploadWithPreview {
         ${this.options.multiple ? 'multiple' : ''}
         type="file"
       />
-      <a class="clear-button" href="javascript:void(0)" title="Clear Image"/>
     </label>
     <div class="image-preview"></div>
   `;
 
     const inputHidden = this.el.querySelector('.custom-file-container .input-hidden');
     const imagePreview = this.el.querySelector('.custom-file-container .image-preview');
-    const clearButton = this.el.querySelector('.custom-file-container .clear-button');
-    const allRequiredElementsFound =
-      inputHidden != null && imagePreview != null && clearButton != null;
+    const allRequiredElementsFound = inputHidden != null && imagePreview != null;
 
     if (allRequiredElementsFound) {
       this.inputHidden = inputHidden as HTMLInputElement;
       this.imagePreview = imagePreview as HTMLDivElement;
-      this.clearButton = clearButton;
     } else {
       throw new Error(`Cannot find all necessary elements for the id: ${this.uploadId}`);
     }
@@ -273,21 +260,6 @@ export class FileUploadWithPreview {
         // Handle issue with the same file being selected
         // https://stackoverflow.com/a/54633061/8014660
         target.value = '';
-      },
-      true,
-    );
-
-    this.clearButton.addEventListener(
-      'click',
-      () => {
-        const eventPayload: ClearButtonClickedEvent = {
-          detail: {
-            uploadId: this.uploadId,
-          },
-        };
-        const clearButtonClickedEvent = new CustomEvent(Events.CLEAR_BUTTON_CLICKED, eventPayload);
-        window.dispatchEvent(clearButtonClickedEvent);
-        this.resetPreviewPanel();
       },
       true,
     );

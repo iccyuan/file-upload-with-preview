@@ -39,23 +39,4 @@ describe('Module Actions', () => {
     expect(upload.cachedFileArray.length).toBe(2);
     expect(upload.uploadId).toBe(TEST_ID);
   });
-
-  it('clears an added file when the clear button is clicked', () => {
-    expect.assertions(3);
-
-    const upload = new FileUploadWithPreview(TEST_ID);
-
-    const file = new Blob([''], { type: 'image/jpeg' });
-    upload.cachedFileArray.push(file as File);
-    expect(upload.cachedFileArray.length).toBe(1);
-
-    const event = new Event('click', {
-      bubbles: true,
-      cancelable: true,
-    });
-    upload.clearButton.dispatchEvent(event);
-
-    expect(upload.uploadId).toBe(TEST_ID);
-    expect(upload.cachedFileArray).toEqual([]);
-  });
 });
