@@ -219,20 +219,25 @@ export class FileUploadWithPreview {
 
     this.el = el;
     this.el.innerHTML += `
-  
-      <label class="input-container">
-        <input
-          accept="${this.options.accept}"
-          aria-label="Choose File"
-          class="input-hidden"
-          id="file-upload-with-preview-${uploadId}"
-          ${this.options.multiple ? 'multiple' : ''}
-          type="file"
-        />
-        <span class="input-visible"></span>
-      </label>
-      <div class="image-preview"></div>
-    `;
+    <div class="label-container">
+      <label>${this.options.text.label}</label>
+      <a class="clear-button" href="javascript:void(0)" title="Clear Image">
+        &times;
+      </a>
+    </div>
+    <label class="input-container">
+      <input
+        accept="${this.options.accept}"
+        aria-label="Choose File"
+        class="input-hidden"
+        id="file-upload-with-preview-${uploadId}"
+        ${this.options.multiple ? 'multiple' : ''}
+        type="file"
+      />
+      <span class="input-visible"></span>
+    </label>
+    <div class="image-preview"></div>
+  `;
 
     const inputHidden = this.el.querySelector('.custom-file-container .input-hidden');
     const inputVisible = this.el.querySelector('.custom-file-container .input-visible');
