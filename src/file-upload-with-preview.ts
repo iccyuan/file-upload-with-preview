@@ -1,4 +1,3 @@
-import internal from 'stream';
 import { Events } from './constants/events';
 import { UNIQUE_ID_IDENTIFIER } from './constants/file';
 import {
@@ -499,7 +498,9 @@ export class FileUploadWithPreview {
     const [deletedFile] = this.cachedFileArray.splice(index, 1);
 
     // 找到对应文件索引的图片元素，并从DOM中移除
-    const imagePreviewItem = this.imagePreview.querySelector(`.image-preview-item[data-upload-name="${deletedFile.name}"]`);
+    const imagePreviewItem = this.imagePreview.querySelector(
+      `.image-preview-item[data-upload-name="${deletedFile.name}"]`,
+    );
     if (imagePreviewItem) {
       this.imagePreview.removeChild(imagePreviewItem);
     }
@@ -522,7 +523,6 @@ export class FileUploadWithPreview {
     window.dispatchEvent(imageDeletedEvent);
   }
 
-
   refreshPreviewPanel() {
     const timeoutWait = 200; // Match the opacity animation on the MULTI_ITEM_CLEAR_ANIMATION_CLASS
     const imagePreviewItems = this.imagePreview.querySelectorAll('.image-preview-item');
@@ -543,13 +543,14 @@ export class FileUploadWithPreview {
     }, timeoutWait);
   }
 
-  setPorgress(file: File, progress:number) {
-    const progressBar = this.imagePreview.querySelector(`.image-preview-item-progress-bar[data-upload-name="${file.name}-progress"]`) as HTMLElement;
+  setPorgress(file: File, progress: number) {
+    const progressBar = this.imagePreview.querySelector(
+      `.image-preview-item-progress-bar[data-upload-name="${file.name}-progress"]`,
+    ) as HTMLElement;
     if (progressBar && progress < 100) {
       progressBar.style.width = `${progress}%`;
     }
   }
-
 
   emulateInputSelection() {
     this.inputHidden.click();

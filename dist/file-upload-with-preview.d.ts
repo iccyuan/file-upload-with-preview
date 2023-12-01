@@ -127,10 +127,6 @@ export declare class FileUploadWithPreview {
      * Hidden input
      */
     inputHidden: HTMLInputElement;
-    /**
-     * Visible input
-     */
-    inputVisible: Element;
     options: RequiredOptions;
     /**
      * The `id` you set for the instance
@@ -145,7 +141,7 @@ export declare class FileUploadWithPreview {
     replaceFileAtIndex(file: File, index: number): void;
     deleteFileAtIndex(index: number): void;
     refreshPreviewPanel(): void;
-    addBrowseButton(text: string): void;
+    setPorgress(file: File, progress: number): void;
     emulateInputSelection(): void;
     resetPreviewPanel(): void;
 }

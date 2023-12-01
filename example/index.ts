@@ -29,7 +29,7 @@ const secondUpload = new FileUploadWithPreview('mySecondImage', {
     chooseFile: 'Take your pick...',
     label: 'Choose Files to Upload',
   },
-})
+});
 
 const firstUploadInfoButton = document.querySelector('.upload-info-button-first');
 const secondUploadInfoButton = document.querySelector('.upload-info-button-second');
@@ -55,7 +55,7 @@ window.addEventListener(Events.IMAGE_ADDED, (e: Event) => {
   const interval = setInterval(() => {
     progress += 10;
     if (progress < 100) {
-       secondUpload.setPorgress(detail.cachedFileArray[0],progress)
+      secondUpload.setPorgress(detail.cachedFileArray[0], progress);
     } else {
       clearInterval(interval);
     }
