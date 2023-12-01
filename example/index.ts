@@ -29,7 +29,7 @@ const secondUpload = new FileUploadWithPreview('mySecondImage', {
     chooseFile: 'Take your pick...',
     label: 'Choose Files to Upload',
   },
-});
+})
 
 const firstUploadInfoButton = document.querySelector('.upload-info-button-first');
 const secondUploadInfoButton = document.querySelector('.upload-info-button-second');

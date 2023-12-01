@@ -219,12 +219,7 @@ export class FileUploadWithPreview {
 
     this.el = el;
     this.el.innerHTML += `
-      <div class="label-container">
-        <label>${this.options.text.label}</label>
-        <a class="clear-button" href="javascript:void(0)" title="Clear Image">
-          &times;
-        </a>
-      </div>
+  
       <label class="input-container">
         <input
           accept="${this.options.accept}"
@@ -333,6 +328,22 @@ export class FileUploadWithPreview {
         };
         const imageClickedEvent = new CustomEvent(Events.IMAGE_MULTI_ITEM_CLICKED, eventPayload);
         window.dispatchEvent(imageClickedEvent);
+      }
+    });
+
+    // 解决文件移除操作和文件选择操作冲突的问题
+    this.imagePreview.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement;
+
+      // 如果点击的是移除图标，则处理移除逻辑，但不触发文件选择
+      if (target.matches('.image-preview-item-clear-icon')) {
+        const fileName = target.getAttribute('data-upload-name');
+        const selectedFileIndex = this.cachedFileArray.findIndex(({ name }) => name === fileName);
+        this.deleteFileAtIndex(selectedFileIndex);
+        e.stopPropagation(); // 阻止事件冒泡，避免触发文件选择
+      } else if (target.matches('.image-preview')) {
+        // 如果 hideInputContainer 为 true，则允许点击 image-preview 触发文件选择
+        this.emulateInputSelection();
       }
     });
   }
@@ -496,12 +507,25 @@ export class FileUploadWithPreview {
       throw new Error(`There is no file at index ${index}`);
     }
 
-    this.cachedFileArray = [
-      ...this.cachedFileArray.slice(0, index),
-      ...this.cachedFileArray.slice(index + 1),
-    ];
-    this.refreshPreviewPanel();
+    // 从缓存数组中移除文件
+    const [deletedFile] = this.cachedFileArray.splice(index, 1);
 
+    // 找到对应文件索引的图片元素，并从DOM中移除
+    const imagePreviewItem = this.imagePreview.querySelector(`.image-preview-item[data-upload-name="${deletedFile.name}"]`);
+    if (imagePreviewItem) {
+      this.imagePreview.removeChild(imagePreviewItem);
+    }
+
+    // 更新可见输入以反映新的文件计数
+    if (this.cachedFileArray.length === 0) {
+      this.inputVisible.innerHTML = this.options.text.chooseFile;
+      this.imagePreview.style.backgroundImage = `url("${this.options.images.baseImage}")`;
+    } else if (this.cachedFileArray.length === 1) {
+      this.inputVisible.textContent = this.cachedFileArray[0].name.split(UNIQUE_ID_IDENTIFIER)[0];
+    } else {
+      this.inputVisible.innerHTML = `${this.cachedFileArray.length} ${this.options.text.selectedCount}`;
+    }
+    // 分发图片删除事件
     const eventPayload: ImageDeletedEvent = {
       detail: {
         cachedFileArray: this.cachedFileArray,
@@ -510,9 +534,11 @@ export class FileUploadWithPreview {
         uploadId: this.uploadId,
       },
     };
+
     const imageDeletedEvent = new CustomEvent(Events.IMAGE_DELETED, eventPayload);
     window.dispatchEvent(imageDeletedEvent);
   }
+
 
   refreshPreviewPanel() {
     const timeoutWait = 200; // Match the opacity animation on the MULTI_ITEM_CLEAR_ANIMATION_CLASS
@@ -546,7 +572,6 @@ export class FileUploadWithPreview {
     this.inputHidden.value = '';
     this.inputVisible.innerHTML = this.options.text.chooseFile;
     this.addBrowseButton(this.options.text.browse);
-    this.imagePreview.style.backgroundImage = `url("${this.options.images.baseImage}")`;
     this.imagePreview.innerHTML = '';
     this.cachedFileArray = [];
   }
