@@ -14,7 +14,12 @@ import {
   DEFAULT_FILES_SELECTED_TEXT,
   DEFAULT_LABEL_TEXT,
 } from './constants/text';
-import { ImageAddedEvent, ImageDeletedEvent, ImageMultiItemClickedEvent } from './types/events';
+import {
+  ClearButtonClickedEvent,
+  ImageAddedEvent,
+  ImageDeletedEvent,
+  ImageMultiItemClickedEvent,
+} from './types/events';
 import { generateUniqueId } from './utils/file';
 
 export interface Text {
@@ -136,6 +141,10 @@ export class FileUploadWithPreview {
    */
   cachedFileArray: File[];
   /**
+   * Button to reset the instance
+   */
+  clearButton: Element;
+  /**
    * Main container for the instance
    */
   el: Element;
@@ -147,7 +156,10 @@ export class FileUploadWithPreview {
    * Hidden input
    */
   inputHidden: HTMLInputElement;
-
+  /**
+   * Visible input
+   */
+  inputVisible: Element;
   options: RequiredOptions = {
     accept: '*',
     images: {
@@ -207,26 +219,39 @@ export class FileUploadWithPreview {
 
     this.el = el;
     this.el.innerHTML += `
-    <label class="input-container">
-      <input
-        accept="${this.options.accept}"
-        aria-label="Choose File"
-        class="input-hidden"
-        id="file-upload-with-preview-${uploadId}"
-        ${this.options.multiple ? 'multiple' : ''}
-        type="file"
-      />
-    </label>
-    <div class="image-preview"></div>
-  `;
+      <div class="label-container">
+        <label>${this.options.text.label}</label>
+        <a class="clear-button" href="javascript:void(0)" title="Clear Image">
+          &times;
+        </a>
+      </div>
+      <label class="input-container">
+        <input
+          accept="${this.options.accept}"
+          aria-label="Choose File"
+          class="input-hidden"
+          id="file-upload-with-preview-${uploadId}"
+          ${this.options.multiple ? 'multiple' : ''}
+          type="file"
+        />
+        <span class="input-visible"></span>
+      </label>
+      <div class="image-preview"></div>
+    `;
 
     const inputHidden = this.el.querySelector('.custom-file-container .input-hidden');
+    const inputVisible = this.el.querySelector('.custom-file-container .input-visible');
     const imagePreview = this.el.querySelector('.custom-file-container .image-preview');
-    const allRequiredElementsFound = inputHidden != null && imagePreview != null;
+    const clearButton = this.el.querySelector('.custom-file-container .clear-button');
+    const allRequiredElementsFound =
+      inputHidden != null && inputVisible != null && imagePreview != null && clearButton != null;
 
     if (allRequiredElementsFound) {
       this.inputHidden = inputHidden as HTMLInputElement;
+      this.inputVisible = inputVisible;
+      this.inputVisible.innerHTML = this.options.text.chooseFile;
       this.imagePreview = imagePreview as HTMLDivElement;
+      this.clearButton = clearButton;
     } else {
       throw new Error(`Cannot find all necessary elements for the id: ${this.uploadId}`);
     }
@@ -243,6 +268,7 @@ export class FileUploadWithPreview {
     this.options.images.backgroundImage = backgroundImage ?? this.options.images.backgroundImage;
 
     this.addImagesFromPath(this.options.presetFiles);
+    this.addBrowseButton(this.options.text.browse);
     this.imagePreview.style.backgroundImage = `url("${this.options.images.baseImage}")`;
     this.bindClickEvents();
   }
@@ -260,6 +286,21 @@ export class FileUploadWithPreview {
         // Handle issue with the same file being selected
         // https://stackoverflow.com/a/54633061/8014660
         target.value = '';
+      },
+      true,
+    );
+
+    this.clearButton.addEventListener(
+      'click',
+      () => {
+        const eventPayload: ClearButtonClickedEvent = {
+          detail: {
+            uploadId: this.uploadId,
+          },
+        };
+        const clearButtonClickedEvent = new CustomEvent(Events.CLEAR_BUTTON_CLICKED, eventPayload);
+        window.dispatchEvent(clearButtonClickedEvent);
+        this.resetPreviewPanel();
       },
       true,
     );
@@ -292,22 +333,6 @@ export class FileUploadWithPreview {
         };
         const imageClickedEvent = new CustomEvent(Events.IMAGE_MULTI_ITEM_CLICKED, eventPayload);
         window.dispatchEvent(imageClickedEvent);
-      }
-    });
-
-    // 解决文件移除操作和文件选择操作冲突的问题
-    this.imagePreview.addEventListener('click', (e) => {
-      const target = e.target as HTMLElement;
-
-      // 如果点击的是移除图标，则处理移除逻辑，但不触发文件选择
-      if (target.matches('.custom-file-container .image-preview-item-clear-icon')) {
-        const fileName = target.getAttribute('data-upload-name');
-        const selectedFileIndex = this.cachedFileArray.findIndex(({ name }) => name === fileName);
-        this.deleteFileAtIndex(selectedFileIndex);
-        e.stopPropagation(); // 阻止事件冒泡，避免触发文件选择
-      } else if (target.matches('.image-preview')) {
-        // 如果 hideInputContainer 为 true，则允许点击 image-preview 触发文件选择
-        this.emulateInputSelection();
       }
     });
   }
@@ -377,6 +402,14 @@ export class FileUploadWithPreview {
   }
 
   addFileToPreviewPanel(file: File) {
+    if (this.cachedFileArray.length === 0) {
+      this.inputVisible.innerHTML = this.options.text.chooseFile;
+    } else if (this.cachedFileArray.length === 1) {
+      this.inputVisible.textContent = file.name.split(UNIQUE_ID_IDENTIFIER)[0];
+    } else {
+      this.inputVisible.innerHTML = `${this.cachedFileArray.length} ${this.options.text.selectedCount}`;
+    }
+
     const reader = new FileReader();
     reader.readAsDataURL(file);
 
@@ -429,16 +462,13 @@ export class FileUploadWithPreview {
       }
 
       this.imagePreview.innerHTML += `
-      <div
-      class="image-preview-item"
-      data-upload-name="${file.name}"
-      style="background-image: url('${backgroundImage}'); "
-    >
-      ${this.options.showDeleteButtonOnImages ? imageClearContent(file.name) : undefined}
-      <div class="image-preview-item-progress-bar-container">
-        <div class="image-preview-item-progress-bar" data-upload-name="${file.name}-progress"></div>
-      </div>
-    </div>
+        <div
+          class="image-preview-item"
+          data-upload-name="${file.name}"
+          style="background-image: url('${backgroundImage}'); "
+        >
+          ${this.options.showDeleteButtonOnImages ? imageClearContent(file.name) : undefined}
+        </div>
       `;
     };
   }
@@ -466,22 +496,12 @@ export class FileUploadWithPreview {
       throw new Error(`There is no file at index ${index}`);
     }
 
-    // 从缓存数组中移除文件
-    const [deletedFile] = this.cachedFileArray.splice(index, 1);
+    this.cachedFileArray = [
+      ...this.cachedFileArray.slice(0, index),
+      ...this.cachedFileArray.slice(index + 1),
+    ];
+    this.refreshPreviewPanel();
 
-    // 找到对应文件索引的图片元素，并从DOM中移除
-    const imagePreviewItem = this.imagePreview.querySelector(
-      `.image-preview-item[data-upload-name="${deletedFile.name}"]`,
-    );
-    if (imagePreviewItem) {
-      this.imagePreview.removeChild(imagePreviewItem);
-    }
-
-    // 更新可见输入以反映新的文件计数
-    if (this.cachedFileArray.length === 0) {
-      this.imagePreview.style.backgroundImage = `url("${this.options.images.baseImage}")`;
-    }
-    // 分发图片删除事件
     const eventPayload: ImageDeletedEvent = {
       detail: {
         cachedFileArray: this.cachedFileArray,
@@ -490,7 +510,6 @@ export class FileUploadWithPreview {
         uploadId: this.uploadId,
       },
     };
-
     const imageDeletedEvent = new CustomEvent(Events.IMAGE_DELETED, eventPayload);
     window.dispatchEvent(imageDeletedEvent);
   }
@@ -515,13 +534,8 @@ export class FileUploadWithPreview {
     }, timeoutWait);
   }
 
-  setPorgress(file: File, progress: number) {
-    const progressBar = this.imagePreview.querySelector(
-      `.image-preview-item-progress-bar[data-upload-name="${file.name}-progress"]`,
-    ) as HTMLElement;
-    if (progressBar && progress < 100) {
-      progressBar.style.width = `${progress}%`;
-    }
+  addBrowseButton(text: string) {
+    this.inputVisible.innerHTML += `<span class="browse-button">${text}</span>`;
   }
 
   emulateInputSelection() {
@@ -530,6 +544,9 @@ export class FileUploadWithPreview {
 
   resetPreviewPanel() {
     this.inputHidden.value = '';
+    this.inputVisible.innerHTML = this.options.text.chooseFile;
+    this.addBrowseButton(this.options.text.browse);
+    this.imagePreview.style.backgroundImage = `url("${this.options.images.baseImage}")`;
     this.imagePreview.innerHTML = '';
     this.cachedFileArray = [];
   }

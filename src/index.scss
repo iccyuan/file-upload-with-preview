@@ -24,18 +24,62 @@ $box-shadow: 0 4px 10px 0 rgba($black, 0.25);
     box-sizing: border-box;
   }
 
+  .label-container {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 4px;
+  }
+
+  .clear-button {
+    color: $font-color;
+    font-size: 26px;
+    height: 26px;
+    line-height: 26px;
+    text-decoration: none;
+    transition: color 0.2s ease-in-out;
+
+    &:hover {
+      color: $hover;
+    }
+  }
+
   .input-container {
     display: inline-block;
-    height: 0px;
+    height: 40px;
+    margin-bottom: 8px;
+    position: relative;
     width: 100%;
+
+    &:hover {
+      cursor: pointer;
+    }
   }
 
   .input-hidden {
-    height: 0px;
+    height: toPx($input-height);
     margin: 0;
     max-width: 100%;
     min-width: toPx($input-min-width);
     opacity: 0;
+  }
+
+  .input-visible {
+    background-clip: padding-box;
+    background-color: $white;
+    border-radius: toPx($border-radius);
+    border: 1px solid $border-color;
+    color: $font-color;
+    height: toPx($input-height);
+    left: 0;
+    line-height: 1.5;
+    overflow: hidden;
+    padding: 8px 12px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    user-select: none;
+    z-index: 5;
   }
 
   .browse-button {
@@ -105,22 +149,4 @@ $box-shadow: 0 4px 10px 0 rgba($black, 0.25);
     display: block;
     margin-top: -2px;
   }
-
-  .image-preview-item-progress-bar-container {
-    width: 100%;
-    background: rgba(255, 255, 255, 0.5);
-    border-radius: toPx($border-radius);
-    position: absolute;
-    bottom: 0;
-    left: 0;
-  }
-  
-  .image-preview-item-progress-bar {
-    height: 5px;
-    background: #4caf50;
-    width: 0%; /* Initial width is 0 */
-    border-radius: toPx($border-radius);
-    transition: width 0.5s ease;
-  }
-  
 }

@@ -56,11 +56,6 @@ pre {
   gap: 32px;
   justify-content: center;
   margin-bottom: 32px;
-
-  @media (min-width: 992px) {
-    flex-direction: row;
-    gap: 64px;
-  }
 }
 
 .demo-info-container {
