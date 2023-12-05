@@ -268,10 +268,10 @@ export class FileUploadWithPreview {
 
     let fileArray = Array.from(files);
 
-    let isExists = false
+    let isExists = false;
     fileArray.forEach((file) => {
-      if (this.cachedFileArray.some(cachedFile => cachedFile.name === file.name)) {
-        isExists = true
+      if (this.cachedFileArray.some((cachedFile) => cachedFile.name === file.name)) {
+        isExists = true;
       }
     });
 
@@ -291,13 +291,9 @@ export class FileUploadWithPreview {
     }
 
     fileArray.forEach((file) => {
-      const fileWithUniqueName = new File(
-        [file],
-        `${file.name}`,
-        {
-          type: file.type,
-        },
-      );
+      const fileWithUniqueName = new File([file], `${file.name}`, {
+        type: file.type,
+      });
 
       this.cachedFileArray.push(fileWithUniqueName);
       this.addFileToPreviewPanel(fileWithUniqueName);
