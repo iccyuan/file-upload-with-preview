@@ -112,6 +112,10 @@ export declare class FileUploadWithPreview {
      */
     cachedFileArray: File[];
     /**
+     * Button to reset the instance
+     */
+    clearButton: Element;
+    /**
      * Main container for the instance
      */
     el: Element;
@@ -123,6 +127,10 @@ export declare class FileUploadWithPreview {
      * Hidden input
      */
     inputHidden: HTMLInputElement;
+    /**
+     * Visible input
+     */
+    inputVisible: Element;
     options: RequiredOptions;
     /**
      * The `id` you set for the instance
@@ -137,7 +145,7 @@ export declare class FileUploadWithPreview {
     replaceFileAtIndex(file: File, index: number): void;
     deleteFileAtIndex(index: number): void;
     refreshPreviewPanel(): void;
-    setPorgress(file: File, progress: number): void;
+    addBrowseButton(text: string): void;
     emulateInputSelection(): void;
     resetPreviewPanel(): void;
 }

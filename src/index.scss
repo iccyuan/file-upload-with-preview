@@ -19,30 +19,15 @@ $box-shadow: 0 4px 10px 0 rgba($black, 0.25);
   box-sizing: border-box;
   position: relative;
   display: block;
+  display: flex;
+  justify-content: flex-start;
+  width: 300px;
+
 
   * {
     box-sizing: border-box;
   }
 
-  .label-container {
-    align-items: center;
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 4px;
-  }
-
-  .clear-button {
-    color: $font-color;
-    font-size: 26px;
-    height: 26px;
-    line-height: 26px;
-    text-decoration: none;
-    transition: color 0.2s ease-in-out;
-
-    &:hover {
-      color: $hover;
-    }
-  }
 
   .input-container {
     display: inline-block;
@@ -50,6 +35,7 @@ $box-shadow: 0 4px 10px 0 rgba($black, 0.25);
     margin-bottom: 8px;
     position: relative;
     width: 100%;
+    background-image: url('assets/images/background.svg');
 
     &:hover {
       cursor: pointer;
@@ -57,30 +43,9 @@ $box-shadow: 0 4px 10px 0 rgba($black, 0.25);
   }
 
   .input-hidden {
-    height: toPx($input-height);
-    margin: 0;
-    max-width: 100%;
-    min-width: toPx($input-min-width);
-    opacity: 0;
+    display: none;
   }
 
-  .input-visible {
-    background-clip: padding-box;
-    background-color: $white;
-    border-radius: toPx($border-radius);
-    border: 1px solid $border-color;
-    color: $font-color;
-    height: toPx($input-height);
-    left: 0;
-    line-height: 1.5;
-    overflow: hidden;
-    padding: 8px 12px;
-    position: absolute;
-    right: 0;
-    top: 0;
-    user-select: none;
-    z-index: 5;
-  }
 
   .browse-button {
     background-color: $grey;

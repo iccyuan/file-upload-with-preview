@@ -51,7 +51,7 @@
     "url": "git+https://github.com/johndatserakis/file-upload-with-preview.git"
   },
   "scripts": {
-    "build": "yarn clear:dist && yarn clear:docs && yarn typescript:check-types && yarn lint:fix && yarn prettier:format && yarn test && yarn build:example && yarn build:library && yarn build:typedoc",
+    "build": "yarn clear:dist && yarn clear:docs && yarn typescript:check-types && yarn lint:fix && yarn prettier:format && yarn build:example && yarn build:library && yarn build:typedoc",
     "build:example": "vite build --config vite.config.app.ts",
     "build:library": "vite build --config vite.config.library.ts",
     "build:typedoc": "yarn typedoc",

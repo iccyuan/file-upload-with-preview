@@ -9,45 +9,12 @@ import {
 } from './constants/images';
 import { MULTI_ITEM_CLEAR_ANIMATION_CLASS } from './constants/style';
 import {
-  DEFAULT_BROWSE_TEXT,
-  DEFAULT_CHOOSE_FILE_TEXT,
-  DEFAULT_FILES_SELECTED_TEXT,
-  DEFAULT_LABEL_TEXT,
-} from './constants/text';
-import {
-  ClearButtonClickedEvent,
   ImageAddedEvent,
   ImageDeletedEvent,
   ImageMultiItemClickedEvent,
 } from './types/events';
 import { generateUniqueId } from './utils/file';
 
-export interface Text {
-  /**
-   * Browse button text
-   *
-   * @default "Browse"
-   */
-  browse?: string;
-  /**
-   * Placeholder text
-   *
-   * @default "Choose file..."
-   */
-  chooseFile?: string;
-  /**
-   * Main input label text
-   *
-   * @default "Upload"
-   */
-  label?: string;
-  /**
-   * Count descriptor text. Defaults to `${ n } files selected`.
-   *
-   * @default "files selected"
-   */
-  selectedCount?: string;
-}
 
 export interface Images {
   /**
@@ -122,15 +89,10 @@ export interface Options {
    * @default true
    */
   showDeleteButtonOnImages?: boolean;
-  /**
-   * Configurable text for the library
-   */
-  text?: Text;
 }
 
 export type RequiredOptions = Required<Options> & {
   images: Required<Images>;
-  text: Required<Text>;
 };
 
 export class FileUploadWithPreview {
@@ -140,10 +102,6 @@ export class FileUploadWithPreview {
    * @default []
    */
   cachedFileArray: File[];
-  /**
-   * Button to reset the instance
-   */
-  clearButton: Element;
   /**
    * Main container for the instance
    */
@@ -156,10 +114,7 @@ export class FileUploadWithPreview {
    * Hidden input
    */
   inputHidden: HTMLInputElement;
-  /**
-   * Visible input
-   */
-  inputVisible: Element;
+
   options: RequiredOptions = {
     accept: '*',
     images: {
@@ -173,12 +128,6 @@ export class FileUploadWithPreview {
     multiple: false,
     presetFiles: [],
     showDeleteButtonOnImages: true,
-    text: {
-      browse: DEFAULT_BROWSE_TEXT,
-      chooseFile: DEFAULT_CHOOSE_FILE_TEXT,
-      label: DEFAULT_LABEL_TEXT,
-      selectedCount: DEFAULT_FILES_SELECTED_TEXT,
-    },
   };
   /**
    * The `id` you set for the instance
@@ -203,13 +152,6 @@ export class FileUploadWithPreview {
     this.options.multiple = multiple ?? false;
     this.options.accept = accept ?? this.options.accept;
 
-    // Text options
-    const { browse, chooseFile, label, selectedCount } = options.text || {};
-    this.options.text.chooseFile = chooseFile ?? this.options.text.chooseFile;
-    this.options.text.browse = browse ?? this.options.text.browse;
-    this.options.text.label = label ?? DEFAULT_LABEL_TEXT;
-    this.options.text.selectedCount = selectedCount ?? this.options.text.selectedCount;
-
     // Elements
     const el = document.querySelector(`.custom-file-container[data-upload-id="${this.uploadId}"]`);
 
@@ -219,12 +161,6 @@ export class FileUploadWithPreview {
 
     this.el = el;
     this.el.innerHTML += `
-      <div class="label-container">
-        <label>${this.options.text.label}</label>
-        <a class="clear-button" href="javascript:void(0)" title="Clear Image">
-          &times;
-        </a>
-      </div>
       <label class="input-container">
         <input
           accept="${this.options.accept}"
@@ -234,24 +170,18 @@ export class FileUploadWithPreview {
           ${this.options.multiple ? 'multiple' : ''}
           type="file"
         />
-        <span class="input-visible"></span>
       </label>
       <div class="image-preview"></div>
     `;
 
     const inputHidden = this.el.querySelector('.custom-file-container .input-hidden');
-    const inputVisible = this.el.querySelector('.custom-file-container .input-visible');
     const imagePreview = this.el.querySelector('.custom-file-container .image-preview');
-    const clearButton = this.el.querySelector('.custom-file-container .clear-button');
     const allRequiredElementsFound =
-      inputHidden != null && inputVisible != null && imagePreview != null && clearButton != null;
+      inputHidden != null  && imagePreview != null;
 
     if (allRequiredElementsFound) {
       this.inputHidden = inputHidden as HTMLInputElement;
-      this.inputVisible = inputVisible;
-      this.inputVisible.innerHTML = this.options.text.chooseFile;
       this.imagePreview = imagePreview as HTMLDivElement;
-      this.clearButton = clearButton;
     } else {
       throw new Error(`Cannot find all necessary elements for the id: ${this.uploadId}`);
     }
@@ -268,7 +198,6 @@ export class FileUploadWithPreview {
     this.options.images.backgroundImage = backgroundImage ?? this.options.images.backgroundImage;
 
     this.addImagesFromPath(this.options.presetFiles);
-    this.addBrowseButton(this.options.text.browse);
     this.imagePreview.style.backgroundImage = `url("${this.options.images.baseImage}")`;
     this.bindClickEvents();
   }
@@ -290,20 +219,6 @@ export class FileUploadWithPreview {
       true,
     );
 
-    this.clearButton.addEventListener(
-      'click',
-      () => {
-        const eventPayload: ClearButtonClickedEvent = {
-          detail: {
-            uploadId: this.uploadId,
-          },
-        };
-        const clearButtonClickedEvent = new CustomEvent(Events.CLEAR_BUTTON_CLICKED, eventPayload);
-        window.dispatchEvent(clearButtonClickedEvent);
-        this.resetPreviewPanel();
-      },
-      true,
-    );
 
     this.imagePreview.addEventListener('click', (e) => {
       const target = e.target as HTMLDivElement;
@@ -402,13 +317,6 @@ export class FileUploadWithPreview {
   }
 
   addFileToPreviewPanel(file: File) {
-    if (this.cachedFileArray.length === 0) {
-      this.inputVisible.innerHTML = this.options.text.chooseFile;
-    } else if (this.cachedFileArray.length === 1) {
-      this.inputVisible.textContent = file.name.split(UNIQUE_ID_IDENTIFIER)[0];
-    } else {
-      this.inputVisible.innerHTML = `${this.cachedFileArray.length} ${this.options.text.selectedCount}`;
-    }
 
     const reader = new FileReader();
     reader.readAsDataURL(file);
@@ -534,9 +442,6 @@ export class FileUploadWithPreview {
     }, timeoutWait);
   }
 
-  addBrowseButton(text: string) {
-    this.inputVisible.innerHTML += `<span class="browse-button">${text}</span>`;
-  }
 
   emulateInputSelection() {
     this.inputHidden.click();
@@ -544,8 +449,6 @@ export class FileUploadWithPreview {
 
   resetPreviewPanel() {
     this.inputHidden.value = '';
-    this.inputVisible.innerHTML = this.options.text.chooseFile;
-    this.addBrowseButton(this.options.text.browse);
     this.imagePreview.style.backgroundImage = `url("${this.options.images.baseImage}")`;
     this.imagePreview.innerHTML = '';
     this.cachedFileArray = [];
