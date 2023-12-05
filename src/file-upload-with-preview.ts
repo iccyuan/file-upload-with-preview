@@ -82,6 +82,12 @@ export interface Options {
    * @default true
    */
   showDeleteButtonOnImages?: boolean;
+  /**
+   * Show a select file button 
+   *
+   * @default true
+   */
+  showSelectFileButton?: boolean;
 }
 
 export type RequiredOptions = Required<Options> & {
@@ -121,6 +127,7 @@ export class FileUploadWithPreview {
     multiple: false,
     presetFiles: [],
     showDeleteButtonOnImages: true,
+    showSelectFileButton: true,
   };
   /**
    * The `id` you set for the instance
@@ -138,12 +145,13 @@ export class FileUploadWithPreview {
     this.cachedFileArray = [];
 
     // Base options
-    const { accept, maxFileCount, multiple, presetFiles, showDeleteButtonOnImages } = options;
+    const { accept, maxFileCount, multiple, presetFiles, showDeleteButtonOnImages, showSelectFileButton } = options;
     this.options.showDeleteButtonOnImages = showDeleteButtonOnImages ?? true;
     this.options.maxFileCount = maxFileCount ?? 0;
     this.options.presetFiles = presetFiles ?? [];
     this.options.multiple = multiple ?? false;
     this.options.accept = accept ?? this.options.accept;
+    this.options.showSelectFileButton = showSelectFileButton ?? true;
 
     // Elements
     const el = document.querySelector(`.custom-file-container[data-upload-id="${this.uploadId}"]`);
@@ -167,10 +175,15 @@ export class FileUploadWithPreview {
       <div class="image-preview"></div>
     `;
 
+    const inputContainer = this.el.querySelector('.input-container') as HTMLElement;
     const inputHidden = this.el.querySelector('.custom-file-container .input-hidden');
     const imagePreview = this.el.querySelector('.custom-file-container .image-preview');
     const allRequiredElementsFound = inputHidden != null && imagePreview != null;
-
+    if (options.showSelectFileButton) {
+      inputContainer.style.display = 'block'; // 显示
+    } else {
+      inputContainer.style.display = 'none'; // 隐藏
+    }
     if (allRequiredElementsFound) {
       this.inputHidden = inputHidden as HTMLInputElement;
       this.imagePreview = imagePreview as HTMLDivElement;
