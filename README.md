@@ -1,25 +1,10 @@
-<p align="center"><a href="" target="_blank"><img src="https://raw.githubusercontent.com/johndatserakis/file-upload-with-preview/master/public/file-upload-with-preview.jpg"></a></p>
+<p align="center"><a href="" target="_blank"><img src="https://github.com/iccyuan/file-upload-with-preview/blob/develop/public/Snipaste_2023-12-05_23-05-33.png"></a></p>
 
 # file-upload-with-preview
 
 🖼 Simple file-upload utility that shows a preview of the uploaded image. Written in TypeScript. No dependencies. Works well with or without a framework.
 
-<p align="left">
-  <a href="https://www.npmjs.com/package/file-upload-with-preview"><img src="https://img.shields.io/npm/v/file-upload-with-preview.svg" alt="NPM Version"></a>
-  <a href="https://www.npmjs.com/package/file-upload-with-preview"><img src="https://img.shields.io/npm/dm/file-upload-with-preview.svg" alt="NPM Downloads"></a>
-  <a href="http://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License"></a>
-  <a href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fgithub.com%johndatserakis%2Ffile-upload-with-preview&text=Check%20out%20file-upload-with-preview%20on%20GitHub&via=johndatserakis">
-  <img src="https://img.shields.io/twitter/url/https/github.com/johndatserakis/file-upload-with-preview.svg?style=social" alt="Tweet"></a>
-</p>
 
-## Links
-
-- [Demo](https://johndatserakis.github.io/file-upload-with-preview)
-- [npm](https://www.npmjs.com/package/file-upload-with-preview)
-- [GitHub](https://github.com/johndatserakis/file-upload-with-preview#readme)
-- [CodeSandbox - TypeScript](https://codesandbox.io/s/file-upload-with-preview-4ypil8?file=/src/index.ts)
-- [CodeSandbox - Browser](https://codesandbox.io/s/file-upload-with-preview-browser-446nc8?file=/src/index.js)
-- [Docs](https://johndatserakis.github.io/file-upload-with-preview/typedoc/)
 
 ## Install
 
