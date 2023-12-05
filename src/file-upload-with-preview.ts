@@ -83,7 +83,7 @@ export interface Options {
    */
   showDeleteButtonOnImages?: boolean;
   /**
-   * Show a select file button 
+   * Show a select file button
    *
    * @default true
    */
@@ -145,7 +145,14 @@ export class FileUploadWithPreview {
     this.cachedFileArray = [];
 
     // Base options
-    const { accept, maxFileCount, multiple, presetFiles, showDeleteButtonOnImages, showSelectFileButton } = options;
+    const {
+      accept,
+      maxFileCount,
+      multiple,
+      presetFiles,
+      showDeleteButtonOnImages,
+      showSelectFileButton,
+    } = options;
     this.options.showDeleteButtonOnImages = showDeleteButtonOnImages ?? true;
     this.options.maxFileCount = maxFileCount ?? 0;
     this.options.presetFiles = presetFiles ?? [];
