@@ -1,5 +1,4 @@
 import { Events } from './constants/events';
-import { UNIQUE_ID_IDENTIFIER } from './constants/file';
 import {
   DEFAULT_BACKGROUND_IMAGE,
   DEFAULT_BASE_IMAGE,
@@ -9,7 +8,6 @@ import {
 } from './constants/images';
 import { MULTI_ITEM_CLEAR_ANIMATION_CLASS } from './constants/style';
 import { FileAddedEvent, FileDeletedEvent, FileMultiItemClickedEvent } from './types/events';
-import { generateUniqueId } from './utils/file';
 
 export interface Images {
   /**
