@@ -270,6 +270,15 @@ export class FileUploadWithPreview {
 
     let fileArray = Array.from(files);
 
+    let isExists = false
+    fileArray.forEach((file) => {
+      if (this.cachedFileArray.some(cachedFile => cachedFile.name === file.name)) {
+        isExists = true
+      }
+    });
+
+    if (isExists) return;
+
     if (this.options.multiple && this.options.maxFileCount > 0) {
       const totalFileCount = this.cachedFileArray.length + fileArray.length;
       const differenceFromMax = totalFileCount - this.options.maxFileCount;
@@ -286,7 +295,7 @@ export class FileUploadWithPreview {
     fileArray.forEach((file) => {
       const fileWithUniqueName = new File(
         [file],
-        `${file.name || 'fallback-name'}${UNIQUE_ID_IDENTIFIER}${generateUniqueId()}`,
+        `${file.name}`,
         {
           type: file.type,
         },
