@@ -404,12 +404,20 @@ export class FileUploadWithPreview {
       throw new Error(`There is no file at index ${index}`);
     }
 
-    this.cachedFileArray = [
-      ...this.cachedFileArray.slice(0, index),
-      ...this.cachedFileArray.slice(index + 1),
-    ];
-    this.refreshPreviewPanel();
+    // 从缓存数组中移除文件
+    const [deletedFile] = this.cachedFileArray.splice(index, 1);
 
+    // 找到对应文件索引的图片元素，并从DOM中移除
+    const imagePreviewItem = this.imagePreview.querySelector(`.image-preview-item[data-upload-name="${deletedFile.name}"]`);
+    if (imagePreviewItem) {
+      this.imagePreview.removeChild(imagePreviewItem);
+    }
+
+    // 更新可见输入以反映新的文件计数
+    if (this.cachedFileArray.length === 0) {
+      this.imagePreview.style.backgroundImage = `url("${this.options.images.baseImage}")`;
+    }
+    // 分发图片删除事件
     const eventPayload: ImageDeletedEvent = {
       detail: {
         cachedFileArray: this.cachedFileArray,
@@ -418,6 +426,7 @@ export class FileUploadWithPreview {
         uploadId: this.uploadId,
       },
     };
+
     const imageDeletedEvent = new CustomEvent(Events.IMAGE_DELETED, eventPayload);
     window.dispatchEvent(imageDeletedEvent);
   }

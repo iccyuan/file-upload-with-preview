@@ -9,20 +9,20 @@ $border-color: darken($grey, 20%);
 $black: #333;
 $hover: #777;
 
-$input-min-width: 300;
+$input-width: 40;
 $input-height: 40;
-$image-preview-height: 250;
+$image-preview-item-height: 35;
+$image-preview-height: $input-height;
+$image-preview-width: 200;
 $border-radius: 4;
 $box-shadow: 0 4px 10px 0 rgba($black, 0.25);
 
 .custom-file-container {
+  background-color: transparent;
   box-sizing: border-box;
   position: relative;
-  display: block;
   display: flex;
   justify-content: flex-start;
-  width: 300px;
-
 
   * {
     box-sizing: border-box;
@@ -31,11 +31,10 @@ $box-shadow: 0 4px 10px 0 rgba($black, 0.25);
 
   .input-container {
     display: inline-block;
-    height: 40px;
-    margin-bottom: 8px;
+    width: toPx($input-width);
+    height: toPx($input-height);
     position: relative;
-    width: 100%;
-    background-image: url('assets/images/background.svg');
+    background-image: url('assets/images/file-upload.svg');
 
     &:hover {
       cursor: pointer;
@@ -47,30 +46,18 @@ $box-shadow: 0 4px 10px 0 rgba($black, 0.25);
   }
 
 
-  .browse-button {
-    background-color: $grey;
-    border-left: 1px solid $border-color;
-    color: $font-color;
-    display: block;
-    height: toPx($input-height - 2);
-    padding: 8px 12px;
-    position: absolute;
-    right: 0;
-    top: 0;
-    z-index: 6;
-  }
-
   .image-preview {
-    background-color: $grey;
+    background-color: transparent;
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
     border-radius: toPx($border-radius);
     height: toPx($image-preview-height);
+    width: toPx($image-preview-width);
+    display: flex;
+    align-items: center; /* 垂直居中 */
     overflow: auto;
-    padding: 4px;
     transition: background 0.2s ease-in-out;
-    width: 100%;
   }
 
   .image-preview-item {
@@ -80,11 +67,12 @@ $box-shadow: 0 4px 10px 0 rgba($black, 0.25);
     border-radius: toPx($border-radius);
     box-shadow: $box-shadow;
     float: left;
-    height: 90px;
-    margin: 1.858736059%;
+    margin-left: 1%;
+    height: toPx($image-preview-item-height);
+    aspect-ratio: 4 / 3; /* 宽度与高度的比例 */
+    width: auto; /* 宽度会自动调整以保持比例 */
     position: relative;
     transition: background 0.2s ease-in-out, opacity 0.2s ease-in-out;
-    width: 29.615861214%;
 
     &.multi-item-clear-animation {
       opacity: 0;
@@ -95,13 +83,14 @@ $box-shadow: 0 4px 10px 0 rgba($black, 0.25);
     background: $grey;
     border-radius: 50%;
     box-shadow: $box-shadow;
-    height: 20px;
-    left: -6px;
-    margin-top: -6px;
+    opacity: 100;
+    height: 15px;
+    left: -1px;
+    margin-top: -2px;
     position: absolute;
     text-align: center;
     transition: background 0.2s ease-in-out, color 0.2s ease-in-out;
-    width: 20px;
+    width: 15px;
 
     &:hover {
       background: darken($grey, 5%);
@@ -112,6 +101,6 @@ $box-shadow: 0 4px 10px 0 rgba($black, 0.25);
   .image-preview-item-clear-icon {
     color: $font-color;
     display: block;
-    margin-top: -2px;
+    margin-top: -4px;
   }
 }

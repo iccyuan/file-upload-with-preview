@@ -9,13 +9,9 @@ import {
   ImageDeletedEvent,
   ImageMultiItemClickedEvent,
 } from '../src/index';
-import importedBaseImage from './custom-image.svg';
 
 
 const secondUpload = new FileUploadWithPreview('mySecondImage', {
-  images: {
-    baseImage: importedBaseImage,
-  },
   maxFileCount: 5,
   multiple: true,
 
