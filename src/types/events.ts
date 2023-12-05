@@ -1,21 +1,21 @@
-export interface ImageAddedEventDetail {
+export interface FileAddedEventDetail {
   addedFilesCount: number;
   cachedFileArray: File[];
   files: FileList | File[];
   uploadId: string;
 }
-export interface ImageAddedEvent {
-  detail: ImageAddedEventDetail;
+export interface FileAddedEvent {
+  detail: FileAddedEventDetail;
 }
 
-export interface ImageDeletedEventDetail {
+export interface FileDeletedEventDetail {
   cachedFileArray: File[];
   currentFileCount: number;
   index: number;
   uploadId: string;
 }
-export interface ImageDeletedEvent {
-  detail: ImageDeletedEventDetail;
+export interface FileDeletedEvent {
+  detail: FileDeletedEventDetail;
 }
 
 export interface ClearButtonClickedEventDetail {
@@ -25,12 +25,12 @@ export interface ClearButtonClickedEvent {
   detail: ClearButtonClickedEventDetail;
 }
 
-export interface ImageMultiItemClickedEventDetail {
+export interface FileMultiItemClickedEventDetail {
   cachedFileArray: File[];
   file: File;
   index: number;
   uploadId: string;
 }
-export interface ImageMultiItemClickedEvent {
-  detail: ImageMultiItemClickedEventDetail;
+export interface FileMultiItemClickedEvent {
+  detail: FileMultiItemClickedEventDetail;
 }

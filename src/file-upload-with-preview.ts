@@ -8,13 +8,8 @@ import {
   DEFAULT_SUCCESS_VIDEO_IMAGE,
 } from './constants/images';
 import { MULTI_ITEM_CLEAR_ANIMATION_CLASS } from './constants/style';
-import {
-  ImageAddedEvent,
-  ImageDeletedEvent,
-  ImageMultiItemClickedEvent,
-} from './types/events';
+import { FileAddedEvent, FileDeletedEvent, FileMultiItemClickedEvent } from './types/events';
 import { generateUniqueId } from './utils/file';
-
 
 export interface Images {
   /**
@@ -176,8 +171,7 @@ export class FileUploadWithPreview {
 
     const inputHidden = this.el.querySelector('.custom-file-container .input-hidden');
     const imagePreview = this.el.querySelector('.custom-file-container .image-preview');
-    const allRequiredElementsFound =
-      inputHidden != null  && imagePreview != null;
+    const allRequiredElementsFound = inputHidden != null && imagePreview != null;
 
     if (allRequiredElementsFound) {
       this.inputHidden = inputHidden as HTMLInputElement;
@@ -219,7 +213,6 @@ export class FileUploadWithPreview {
       true,
     );
 
-
     this.imagePreview.addEventListener('click', (e) => {
       const target = e.target as HTMLDivElement;
 
@@ -238,7 +231,7 @@ export class FileUploadWithPreview {
 
         if (fileIndex < 0) return;
 
-        const eventPayload: ImageMultiItemClickedEvent = {
+        const eventPayload: FileMultiItemClickedEvent = {
           detail: {
             cachedFileArray: this.cachedFileArray,
             file: this.cachedFileArray[fileIndex],
@@ -303,7 +296,7 @@ export class FileUploadWithPreview {
       this.addFileToPreviewPanel(fileWithUniqueName);
     });
 
-    const eventPayload: ImageAddedEvent = {
+    const eventPayload: FileAddedEvent = {
       detail: {
         addedFilesCount: fileArray.length,
         cachedFileArray: this.cachedFileArray,
@@ -317,7 +310,6 @@ export class FileUploadWithPreview {
   }
 
   addFileToPreviewPanel(file: File) {
-
     const reader = new FileReader();
     reader.readAsDataURL(file);
 
@@ -408,7 +400,9 @@ export class FileUploadWithPreview {
     const [deletedFile] = this.cachedFileArray.splice(index, 1);
 
     // 找到对应文件索引的图片元素，并从DOM中移除
-    const imagePreviewItem = this.imagePreview.querySelector(`.image-preview-item[data-upload-name="${deletedFile.name}"]`);
+    const imagePreviewItem = this.imagePreview.querySelector(
+      `.image-preview-item[data-upload-name="${deletedFile.name}"]`,
+    );
     if (imagePreviewItem) {
       this.imagePreview.removeChild(imagePreviewItem);
     }
@@ -418,7 +412,7 @@ export class FileUploadWithPreview {
       this.imagePreview.style.backgroundImage = `url("${this.options.images.baseImage}")`;
     }
     // 分发图片删除事件
-    const eventPayload: ImageDeletedEvent = {
+    const eventPayload: FileDeletedEvent = {
       detail: {
         cachedFileArray: this.cachedFileArray,
         currentFileCount: this.cachedFileArray.length,
@@ -450,7 +444,6 @@ export class FileUploadWithPreview {
       this.cachedFileArray.forEach((file) => this.addFileToPreviewPanel(file));
     }, timeoutWait);
   }
-
 
   emulateInputSelection() {
     this.inputHidden.click();

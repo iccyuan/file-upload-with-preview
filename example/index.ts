@@ -4,21 +4,18 @@ import '../src/index.scss';
 import {
   ClearButtonClickedEvent,
   Events,
+  FileAddedEvent,
+  FileDeletedEvent,
+  FileMultiItemClickedEvent,
   FileUploadWithPreview,
-  ImageAddedEvent,
-  ImageDeletedEvent,
-  ImageMultiItemClickedEvent,
 } from '../src/index';
-
 
 const secondUpload = new FileUploadWithPreview('mySecondImage', {
   maxFileCount: 5,
   multiple: true,
-
 });
 
 const secondUploadInfoButton = document.querySelector('.upload-info-button-second');
-
 
 if (secondUploadInfoButton) {
   secondUploadInfoButton.addEventListener('click', () => {
@@ -27,13 +24,13 @@ if (secondUploadInfoButton) {
 }
 
 window.addEventListener(Events.IMAGE_ADDED, (e: Event) => {
-  const { detail } = e as unknown as ImageAddedEvent;
+  const { detail } = e as unknown as FileAddedEvent;
 
   console.log('detail', detail);
 });
 
 window.addEventListener(Events.IMAGE_DELETED, (e: Event) => {
-  const { detail } = e as unknown as ImageDeletedEvent;
+  const { detail } = e as unknown as FileDeletedEvent;
 
   console.log('detail', detail);
 });
@@ -45,7 +42,7 @@ window.addEventListener(Events.CLEAR_BUTTON_CLICKED, (e: Event) => {
 });
 
 window.addEventListener(Events.IMAGE_MULTI_ITEM_CLICKED, (e: Event) => {
-  const { detail } = e as unknown as ImageMultiItemClickedEvent;
+  const { detail } = e as unknown as FileMultiItemClickedEvent;
 
   console.log('detail', detail);
 });

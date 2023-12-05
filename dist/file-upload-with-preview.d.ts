@@ -1,29 +1,3 @@
-export interface Text {
-    /**
-     * Browse button text
-     *
-     * @default "Browse"
-     */
-    browse?: string;
-    /**
-     * Placeholder text
-     *
-     * @default "Choose file..."
-     */
-    chooseFile?: string;
-    /**
-     * Main input label text
-     *
-     * @default "Upload"
-     */
-    label?: string;
-    /**
-     * Count descriptor text. Defaults to `${ n } files selected`.
-     *
-     * @default "files selected"
-     */
-    selectedCount?: string;
-}
 export interface Images {
     /**
      * Background image for image grid
@@ -95,14 +69,9 @@ export interface Options {
      * @default true
      */
     showDeleteButtonOnImages?: boolean;
-    /**
-     * Configurable text for the library
-     */
-    text?: Text;
 }
 export type RequiredOptions = Required<Options> & {
     images: Required<Images>;
-    text: Required<Text>;
 };
 export declare class FileUploadWithPreview {
     /**
@@ -111,10 +80,6 @@ export declare class FileUploadWithPreview {
      * @default []
      */
     cachedFileArray: File[];
-    /**
-     * Button to reset the instance
-     */
-    clearButton: Element;
     /**
      * Main container for the instance
      */
@@ -127,10 +92,6 @@ export declare class FileUploadWithPreview {
      * Hidden input
      */
     inputHidden: HTMLInputElement;
-    /**
-     * Visible input
-     */
-    inputVisible: Element;
     options: RequiredOptions;
     /**
      * The `id` you set for the instance
@@ -145,7 +106,6 @@ export declare class FileUploadWithPreview {
     replaceFileAtIndex(file: File, index: number): void;
     deleteFileAtIndex(index: number): void;
     refreshPreviewPanel(): void;
-    addBrowseButton(text: string): void;
     emulateInputSelection(): void;
     resetPreviewPanel(): void;
 }
