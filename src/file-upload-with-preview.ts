@@ -323,7 +323,7 @@ export class FileUploadWithPreview {
       detail: {
         addedFilesCount: fileArray.length,
         cachedFileArray: this.cachedFileArray,
-        files,
+        file: this.cachedFileArray[this.cachedFileArray.length - 1 < 0 ? 0 : this.cachedFileArray.length - 1],
         uploadId: this.uploadId,
       },
     };
