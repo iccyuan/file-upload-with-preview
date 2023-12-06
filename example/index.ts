@@ -13,7 +13,7 @@ import {
 const secondUpload = new FileUploadWithPreview('mySecondImage', {
   maxFileCount: 5,
   multiple: true,
-  showSelectFileButton: true,
+  showSelectFileButton: false,
 });
 
 const secondUploadInfoButton = document.querySelector('.upload-info-button-second');
