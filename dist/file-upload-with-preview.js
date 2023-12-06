@@ -46,9 +46,9 @@ class R {
       </label>
       <div class="image-preview"></div>
     `;
-    const o = this.el.querySelector(".input-container"), s = this.el.querySelector(".custom-file-container .input-hidden"), n = this.el.querySelector(".custom-file-container .image-preview"), r = s != null && n != null;
-    if (e.showSelectFileButton ? o.style.display = "block" : o.style.display = "none", r)
-      this.inputHidden = s, this.imagePreview = n;
+    const o = this.el.querySelector(".input-container"), s = this.el.querySelector(".custom-file-container .input-hidden"), r = this.el.querySelector(".custom-file-container .image-preview"), n = s != null && r != null;
+    if (e.showSelectFileButton ? o.style.display = "block" : o.style.display = "none", n)
+      this.inputHidden = s, this.imagePreview = r;
     else
       throw new Error(`Cannot find all necessary elements for the id: ${this.uploadId}`);
     const { backgroundImage: l, baseImage: c, successFileAltImage: d, successPdfImage: m, successVideoImage: h } = e.images || {};
@@ -120,7 +120,7 @@ class R {
       detail: {
         addedFilesCount: e.length,
         cachedFileArray: this.cachedFileArray,
-        files: A,
+        file: this.cachedFileArray[this.cachedFileArray.length - 1 < 0 ? 0 : this.cachedFileArray.length - 1],
         uploadId: this.uploadId
       }
     }, I = new CustomEvent(i.IMAGE_ADDED, Q);

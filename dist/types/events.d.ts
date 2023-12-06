@@ -1,7 +1,7 @@
 export interface FileAddedEventDetail {
     addedFilesCount: number;
     cachedFileArray: File[];
-    files: FileList | File[];
+    file: File;
     uploadId: string;
 }
 export interface FileAddedEvent {
