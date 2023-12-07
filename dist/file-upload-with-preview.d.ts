@@ -113,6 +113,6 @@ export declare class FileUploadWithPreview {
     deleteFileAtIndex(index: number): void;
     refreshPreviewPanel(): void;
     emulateInputSelection(): void;
-    resetPreviewPanel(): void;
+    reset(): void;
 }
 //# sourceMappingURL=file-upload-with-preview.d.ts.map

@@ -1,6 +1,6 @@
 export enum Events {
-  IMAGE_ADDED = 'fileUploadWithPreview:imagesAdded',
-  IMAGE_DELETED = 'fileUploadWithPreview:imageDeleted',
+  FILE_ADDED = 'fileUploadWithPreview:fileAdded',
+  FILE_DELETED = 'fileUploadWithPreview:fileDeleted',
   CLEAR_BUTTON_CLICKED = 'fileUploadWithPreview:clearButtonClicked',
-  IMAGE_MULTI_ITEM_CLICKED = 'fileUploadWithPreview:imageMultiItemClicked',
+  IMAGE_MULTI_ITEM_CLICKED = 'fileUploadWithPreview:fileMultiItemClicked',
 }

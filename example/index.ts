@@ -24,13 +24,13 @@ if (secondUploadInfoButton) {
   });
 }
 
-window.addEventListener(Events.IMAGE_ADDED, (e: Event) => {
+window.addEventListener(Events.FILE_ADDED, (e: Event) => {
   const { detail } = e as unknown as FileAddedEvent;
 
   console.log('detail', detail);
 });
 
-window.addEventListener(Events.IMAGE_DELETED, (e: Event) => {
+window.addEventListener(Events.FILE_DELETED, (e: Event) => {
   const { detail } = e as unknown as FileDeletedEvent;
 
   console.log('detail', detail);

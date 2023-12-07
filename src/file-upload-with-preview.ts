@@ -7,7 +7,12 @@ import {
   DEFAULT_SUCCESS_VIDEO_IMAGE,
 } from './constants/images';
 import { MULTI_ITEM_CLEAR_ANIMATION_CLASS } from './constants/style';
-import { FileAddedEvent, FileDeletedEvent, FileMultiItemClickedEvent } from './types/events';
+import {
+  ClearButtonClickedEvent,
+  FileAddedEvent,
+  FileDeletedEvent,
+  FileMultiItemClickedEvent,
+} from './types/events';
 
 export interface Images {
   /**
@@ -329,7 +334,7 @@ export class FileUploadWithPreview {
         uploadId: this.uploadId,
       },
     };
-    const imagesAddedEvent = new CustomEvent(Events.IMAGE_ADDED, eventPayload);
+    const imagesAddedEvent = new CustomEvent(Events.FILE_ADDED, eventPayload);
 
     window.dispatchEvent(imagesAddedEvent);
   }
@@ -446,7 +451,7 @@ export class FileUploadWithPreview {
       },
     };
 
-    const imageDeletedEvent = new CustomEvent(Events.IMAGE_DELETED, eventPayload);
+    const imageDeletedEvent = new CustomEvent(Events.FILE_DELETED, eventPayload);
     window.dispatchEvent(imageDeletedEvent);
   }
 
@@ -462,7 +467,7 @@ export class FileUploadWithPreview {
 
       // Reset the panel if there are no files
       if (!this.cachedFileArray.length) {
-        this.resetPreviewPanel();
+        this.reset();
         return;
       }
 
@@ -474,10 +479,17 @@ export class FileUploadWithPreview {
     this.inputHidden.click();
   }
 
-  resetPreviewPanel() {
+  reset() {
     this.inputHidden.value = '';
     this.imagePreview.style.backgroundImage = `url("${this.options.images.baseImage}")`;
     this.imagePreview.innerHTML = '';
     this.cachedFileArray = [];
+    const eventPayload: ClearButtonClickedEvent = {
+      detail: {
+        uploadId: this.uploadId,
+      },
+    };
+    const resetEvent = new CustomEvent(Events.CLEAR_BUTTON_CLICKED, eventPayload);
+    window.dispatchEvent(resetEvent);
   }
 }
