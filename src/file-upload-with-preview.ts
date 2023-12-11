@@ -2,9 +2,11 @@ import { Events } from './constants/events';
 import {
   DEFAULT_BACKGROUND_IMAGE,
   DEFAULT_BASE_IMAGE,
+  DEFAULT_SUCCESS_EXCEL_IMAGE,
   DEFAULT_SUCCESS_FILE_ALT_IMAGE,
   DEFAULT_SUCCESS_PDF_IMAGE,
   DEFAULT_SUCCESS_VIDEO_IMAGE,
+  DEFAULT_SUCCESS_WORD_IMAGE,
 } from './constants/images';
 import { MULTI_ITEM_CLEAR_ANIMATION_CLASS } from './constants/style';
 import {
@@ -39,6 +41,18 @@ export interface Images {
    * @default DEFAULT_SUCCESS_PDF_IMAGE
    */
   successPdfImage?: string;
+  /**
+   * WORD upload image
+   *
+   * @default DEFAULT_SUCCESS_WORD_IMAGE
+   */
+  successWordImage?: string;
+  /**
+   * EXCEL upload image
+   *
+   * @default DEFAULT_SUCCESS_EXCEL_IMAGE
+   */
+  successExcelImage?: string;
   /**
    * Video upload image
    *
@@ -124,9 +138,11 @@ export class FileUploadWithPreview {
     images: {
       backgroundImage: DEFAULT_BACKGROUND_IMAGE,
       baseImage: DEFAULT_BASE_IMAGE,
+      successExcelImage: DEFAULT_SUCCESS_EXCEL_IMAGE,
       successFileAltImage: DEFAULT_SUCCESS_FILE_ALT_IMAGE,
       successPdfImage: DEFAULT_SUCCESS_PDF_IMAGE,
       successVideoImage: DEFAULT_SUCCESS_VIDEO_IMAGE,
+      successWordImage: DEFAULT_SUCCESS_WORD_IMAGE,
     },
     maxFileCount: 0,
     multiple: false,
@@ -204,10 +220,20 @@ export class FileUploadWithPreview {
     }
 
     // Images
-    const { backgroundImage, baseImage, successFileAltImage, successPdfImage, successVideoImage } =
-      options.images || {};
+    const {
+      backgroundImage,
+      baseImage,
+      successFileAltImage,
+      successPdfImage,
+      successExcelImage,
+      successWordImage,
+      successVideoImage,
+    } = options.images || {};
     this.options.images.baseImage = baseImage ?? this.options.images.baseImage;
     this.options.images.successPdfImage = successPdfImage ?? this.options.images.successPdfImage;
+    this.options.images.successExcelImage =
+      successExcelImage ?? this.options.images.successExcelImage;
+    this.options.images.successWordImage = successWordImage ?? this.options.images.successWordImage;
     this.options.images.successVideoImage =
       successVideoImage ?? this.options.images.successVideoImage;
     this.options.images.successFileAltImage =
@@ -265,6 +291,11 @@ export class FileUploadWithPreview {
         const imageClickedEvent = new CustomEvent(Events.IMAGE_MULTI_ITEM_CLICKED, eventPayload);
         window.dispatchEvent(imageClickedEvent);
       }
+    });
+
+    this.inputHidden.addEventListener('click', (_e) => {
+      this.inputHidden.accept = this.options.accept;
+      this.inputHidden.multiple = this.options.multiple;
     });
   }
 
@@ -356,6 +387,16 @@ export class FileUploadWithPreview {
           image = `url("${reader.result}")`;
         } else if (file.type.match('application/pdf')) {
           image = `url("${this.options.images.successPdfImage}")`;
+        } else if (file.type.match('application/ms-excel')) {
+          image = `url("${this.options.images.successExcelImage}")`;
+        } else if (file.type.match('application/msexcel')) {
+          image = `url("${this.options.images.successExcelImage}")`;
+        } else if (file.type.match('application/msword')) {
+          image = `url("${this.options.images.successWordImage}")`;
+        } else if (
+          file.type.match('application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+        ) {
+          image = `url("${this.options.images.successWordImage}")`;
         } else if (file.type.match('video/*')) {
           image = `url("${this.options.images.successVideoImage}")`;
         }
@@ -377,7 +418,7 @@ export class FileUploadWithPreview {
 
       let backgroundImage: string | ArrayBuffer | null | undefined =
         this.options.images.successFileAltImage;
-
+      console.log('file.type', file.type);
       if (
         file.type.match('image/png') ||
         file.type.match('image/jpeg') ||
@@ -387,6 +428,16 @@ export class FileUploadWithPreview {
         backgroundImage = reader.result;
       } else if (file.type.match('application/pdf')) {
         backgroundImage = this.options.images.successPdfImage;
+      } else if (file.type.match('application/ms-excel')) {
+        backgroundImage = this.options.images.successExcelImage;
+      } else if (file.type.match('application/msexcel')) {
+        backgroundImage = this.options.images.successExcelImage;
+      } else if (file.type.match('application/msword')) {
+        backgroundImage = this.options.images.successWordImage;
+      } else if (
+        file.type.match('application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+      ) {
+        backgroundImage = this.options.images.successWordImage;
       } else if (file.type.match('video/*')) {
         backgroundImage = this.options.images.successVideoImage;
       }

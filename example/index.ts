@@ -15,7 +15,7 @@ const secondUpload = new FileUploadWithPreview('mySecondImage', {
   multiple: true,
   showSelectFileButton: true,
 });
-
+//secondUpload.options.accept='.jpg'
 const secondUploadInfoButton = document.querySelector('.upload-info-button-second');
 
 if (secondUploadInfoButton) {

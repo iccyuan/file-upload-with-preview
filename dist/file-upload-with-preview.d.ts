@@ -24,6 +24,18 @@ export interface Images {
      */
     successPdfImage?: string;
     /**
+     * WORD upload image
+     *
+     * @default DEFAULT_SUCCESS_WORD_IMAGE
+     */
+    successWordImage?: string;
+    /**
+     * EXCEL upload image
+     *
+     * @default DEFAULT_SUCCESS_EXCEL_IMAGE
+     */
+    successExcelImage?: string;
+    /**
      * Video upload image
      *
      * @default DEFAULT_SUCCESS_VIDEO_IMAGE
