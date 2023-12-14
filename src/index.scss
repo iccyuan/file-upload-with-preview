@@ -88,7 +88,7 @@ $border-radius: 4;
   .image-preview-item-progress-bar {
     fill: none;
     stroke: rgba(255, 255, 255, 0.8); /* Semi-transparent red color */
-    stroke-width: 4;
+    stroke-width: 12;
     transform: rotate(-90deg);
     transform-origin: 50% 50%;
     transition: stroke-dashoffset 0.3s ease-in-out;

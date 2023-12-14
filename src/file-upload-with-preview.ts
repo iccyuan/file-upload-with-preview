@@ -444,7 +444,7 @@ export class FileUploadWithPreview {
 
       const progressContent = `
     <svg class="image-preview-item-progress hide" width="30" height="30">
-     <circle class="image-preview-item-progress-bar" r="12" cx="15" cy="15"></circle>
+     <circle class="image-preview-item-progress-bar" r="10" cx="15" cy="15"></circle>
     </svg>
 `;
 
