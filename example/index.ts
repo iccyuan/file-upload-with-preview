@@ -30,7 +30,7 @@ window.addEventListener(Events.FILE_ADDED, (e: Event) => {
   let progress = 0;
   const interval = setInterval(() => {
     progress += 10;
-    console.log('progress ', progress)
+    console.log('progress ', progress);
     if (progress >= 100) {
       clearInterval(interval);
       secondUpload.updateProgressBar(detail.file, progress);
@@ -57,4 +57,3 @@ window.addEventListener(Events.IMAGE_MULTI_ITEM_CLICKED, (e: Event) => {
 
   console.log('detail', detail);
 });
-

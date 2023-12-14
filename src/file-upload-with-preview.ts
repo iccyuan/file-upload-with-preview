@@ -458,7 +458,6 @@ export class FileUploadWithPreview {
         ${progressContent}
       </div>
     `;
-
     };
   }
 
@@ -554,25 +553,27 @@ export class FileUploadWithPreview {
 
   updateProgressBar(file: File, progress: number): void {
     // Find the container for the progress bar based on the file name
-    const progressBarContainer = this.imagePreview.querySelector(`.image-preview-item[data-upload-name="${file.name}"] .image-preview-item-progress`) as SVGSVGElement;
+    const progressBarContainer = this.imagePreview.querySelector(
+      `.image-preview-item[data-upload-name="${file.name}"] .image-preview-item-progress`,
+    ) as SVGSVGElement;
 
     // If the progress bar container exists, proceed with the update
     if (progressBarContainer) {
       // Find the progress bar element itself
-      const progressBar = progressBarContainer.querySelector('.image-preview-item-progress-bar') as SVGCircleElement;
+      const progressBar = progressBarContainer.querySelector(
+        '.image-preview-item-progress-bar',
+      ) as SVGCircleElement;
 
       // If the progress bar element is found, calculate the circumference and update the stroke properties
       if (progressBar) {
         const radius = progressBar.r.baseVal.value;
         const circumference = radius * 2 * Math.PI;
         progressBar.style.strokeDasharray = `${circumference} ${circumference}`;
-        progressBar.style.strokeDashoffset = `${circumference - progress / 100 * circumference}`;
+        progressBar.style.strokeDashoffset = `${circumference - (progress / 100) * circumference}`;
 
         // Show or hide the progress bar based on the progress value
-        progressBarContainer.style.display = (progress === 100 || progress === 0) ? 'none' : 'block';
+        progressBarContainer.style.display = progress === 100 || progress === 0 ? 'none' : 'block';
       }
     }
   }
-
-
 }

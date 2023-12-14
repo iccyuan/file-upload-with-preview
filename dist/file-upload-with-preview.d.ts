@@ -126,5 +126,6 @@ export declare class FileUploadWithPreview {
     refreshPreviewPanel(): void;
     emulateInputSelection(): void;
     reset(): void;
+    updateProgressBar(file: File, progress: number): void;
 }
 //# sourceMappingURL=file-upload-with-preview.d.ts.map
