@@ -443,10 +443,11 @@ export class FileUploadWithPreview {
       }
 
       const progressContent = `
-      <div class="image-preview-item-progress">
-        <div class="image-preview-item-progress-bar"></div>
-      </div>
-    `;
+    <svg class="image-preview-item-progress hide" width="30" height="30">
+     <circle class="image-preview-item-progress-bar" r="12" cx="15" cy="15"></circle>
+    </svg>
+`;
+
       this.imagePreview.innerHTML += `
       <div
         class="image-preview-item"
@@ -551,17 +552,27 @@ export class FileUploadWithPreview {
     window.dispatchEvent(resetEvent);
   }
 
-  updateProgressBar(file:File, progress:number) {
-    const progressBar = this.imagePreview.querySelector(`.image-preview-item[data-upload-name="${file.name}"] .image-preview-item-progress-bar`) as HTMLElement;
-    if (progressBar) {
-      progressBar.style.width = `${progress}%`;
-  
-      if (progress === 100) {
-        progressBar.classList.add('complete');
-      } else {
-        progressBar.classList.remove('complete');
+  updateProgressBar(file: File, progress: number): void {
+    // Find the container for the progress bar based on the file name
+    const progressBarContainer = this.imagePreview.querySelector(`.image-preview-item[data-upload-name="${file.name}"] .image-preview-item-progress`) as SVGSVGElement;
+
+    // If the progress bar container exists, proceed with the update
+    if (progressBarContainer) {
+      // Find the progress bar element itself
+      const progressBar = progressBarContainer.querySelector('.image-preview-item-progress-bar') as SVGCircleElement;
+
+      // If the progress bar element is found, calculate the circumference and update the stroke properties
+      if (progressBar) {
+        const radius = progressBar.r.baseVal.value;
+        const circumference = radius * 2 * Math.PI;
+        progressBar.style.strokeDasharray = `${circumference} ${circumference}`;
+        progressBar.style.strokeDashoffset = `${circumference - progress / 100 * circumference}`;
+
+        // Show or hide the progress bar based on the progress value
+        progressBarContainer.style.display = (progress === 100 || progress === 0) ? 'none' : 'block';
       }
     }
   }
-  
+
+
 }
