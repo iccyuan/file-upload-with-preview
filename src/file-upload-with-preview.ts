@@ -442,15 +442,22 @@ export class FileUploadWithPreview {
         backgroundImage = this.options.images.successVideoImage;
       }
 
+      const progressContent = `
+      <div class="image-preview-item-progress">
+        <div class="image-preview-item-progress-bar"></div>
+      </div>
+    `;
       this.imagePreview.innerHTML += `
-        <div
-          class="image-preview-item"
-          data-upload-name="${file.name}"
-          style="background-image: url('${backgroundImage}'); "
-        >
-          ${this.options.showDeleteButtonOnImages ? imageClearContent(file.name) : undefined}
-        </div>
-      `;
+      <div
+        class="image-preview-item"
+        data-upload-name="${file.name}"
+        style="background-image: url('${backgroundImage}'); "
+      >
+        ${this.options.showDeleteButtonOnImages ? imageClearContent(file.name) : undefined}
+        ${progressContent}
+      </div>
+    `;
+
     };
   }
 
@@ -543,4 +550,18 @@ export class FileUploadWithPreview {
     const resetEvent = new CustomEvent(Events.CLEAR_BUTTON_CLICKED, eventPayload);
     window.dispatchEvent(resetEvent);
   }
+
+  updateProgressBar(file:File, progress:number) {
+    const progressBar = this.imagePreview.querySelector(`.image-preview-item[data-upload-name="${file.name}"] .image-preview-item-progress-bar`) as HTMLElement;
+    if (progressBar) {
+      progressBar.style.width = `${progress}%`;
+  
+      if (progress === 100) {
+        progressBar.classList.add('complete');
+      } else {
+        progressBar.classList.remove('complete');
+      }
+    }
+  }
+  
 }

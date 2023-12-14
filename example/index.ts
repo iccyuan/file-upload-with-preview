@@ -26,8 +26,18 @@ if (secondUploadInfoButton) {
 
 window.addEventListener(Events.FILE_ADDED, (e: Event) => {
   const { detail } = e as unknown as FileAddedEvent;
-
   console.log('detail', detail);
+  let progress = 0;
+  const interval = setInterval(() => {
+    progress += 10;
+    console.log('progress ', progress)
+    if (progress >= 100) {
+      clearInterval(interval);
+      secondUpload.updateProgressBar(detail.file, progress);
+    } else {
+      secondUpload.updateProgressBar(detail.file, progress);
+    }
+  }, 500);
 });
 
 window.addEventListener(Events.FILE_DELETED, (e: Event) => {
@@ -47,3 +57,4 @@ window.addEventListener(Events.IMAGE_MULTI_ITEM_CLICKED, (e: Event) => {
 
   console.log('detail', detail);
 });
+
