@@ -387,7 +387,7 @@ export class FileUploadWithPreview {
           image = `url("${reader.result}")`;
         } else if (file.type.match('application/pdf')) {
           image = `url("${this.options.images.successPdfImage}")`;
-        } else if (file.type.match('application/ms-excel')) {
+        } else if (file.type.match('application/text/csv')) {
           image = `url("${this.options.images.successExcelImage}")`;
         } else if (file.type.match('application/msexcel')) {
           image = `url("${this.options.images.successExcelImage}")`;
@@ -428,7 +428,7 @@ export class FileUploadWithPreview {
         backgroundImage = reader.result;
       } else if (file.type.match('application/pdf')) {
         backgroundImage = this.options.images.successPdfImage;
-      } else if (file.type.match('application/ms-excel')) {
+      } else if (file.type.match('text/csv')) {
         backgroundImage = this.options.images.successExcelImage;
       } else if (file.type.match('application/msexcel')) {
         backgroundImage = this.options.images.successExcelImage;

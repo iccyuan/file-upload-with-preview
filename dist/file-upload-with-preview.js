@@ -143,7 +143,7 @@ class z {
     e.readAsDataURL(i), e.onload = () => {
       if (!this.options.multiple) {
         let I = this.options.images.successFileAltImage;
-        i.type.match("image/png") || i.type.match("image/jpeg") || i.type.match("image/webp") || i.type.match("image/gif") ? I = `url("${e.result}")` : i.type.match("application/pdf") ? I = `url("${this.options.images.successPdfImage}")` : i.type.match("application/ms-excel") ? I = `url("${this.options.images.successExcelImage}")` : i.type.match("application/msexcel") ? I = `url("${this.options.images.successExcelImage}")` : i.type.match("application/msword") ? I = `url("${this.options.images.successWordImage}")` : i.type.match("application/vnd.openxmlformats-officedocument.wordprocessingml.document") ? I = `url("${this.options.images.successWordImage}")` : i.type.match("video/*") && (I = `url("${this.options.images.successVideoImage}")`), this.imagePreview.style.backgroundImage = I;
+        i.type.match("image/png") || i.type.match("image/jpeg") || i.type.match("image/webp") || i.type.match("image/gif") ? I = `url("${e.result}")` : i.type.match("application/pdf") ? I = `url("${this.options.images.successPdfImage}")` : i.type.match("application/text/csv") ? I = `url("${this.options.images.successExcelImage}")` : i.type.match("application/msexcel") ? I = `url("${this.options.images.successExcelImage}")` : i.type.match("application/msword") ? I = `url("${this.options.images.successWordImage}")` : i.type.match("application/vnd.openxmlformats-officedocument.wordprocessingml.document") ? I = `url("${this.options.images.successWordImage}")` : i.type.match("video/*") && (I = `url("${this.options.images.successVideoImage}")`), this.imagePreview.style.backgroundImage = I;
         return;
       }
       this.imagePreview.style.backgroundImage = `url("${this.options.images.backgroundImage}")`;
@@ -155,7 +155,7 @@ class z {
         </span>
       `;
       let M = this.options.images.successFileAltImage;
-      console.log("file.type", i.type), i.type.match("image/png") || i.type.match("image/jpeg") || i.type.match("image/webp") || i.type.match("image/gif") ? M = e.result : i.type.match("application/pdf") ? M = this.options.images.successPdfImage : i.type.match("application/ms-excel") ? M = this.options.images.successExcelImage : i.type.match("application/msexcel") ? M = this.options.images.successExcelImage : i.type.match("application/msword") ? M = this.options.images.successWordImage : i.type.match("application/vnd.openxmlformats-officedocument.wordprocessingml.document") ? M = this.options.images.successWordImage : i.type.match("video/*") && (M = this.options.images.successVideoImage);
+      console.log("file.type", i.type), i.type.match("image/png") || i.type.match("image/jpeg") || i.type.match("image/webp") || i.type.match("image/gif") ? M = e.result : i.type.match("application/pdf") ? M = this.options.images.successPdfImage : i.type.match("text/csv") ? M = this.options.images.successExcelImage : i.type.match("application/msexcel") ? M = this.options.images.successExcelImage : i.type.match("application/msword") ? M = this.options.images.successWordImage : i.type.match("application/vnd.openxmlformats-officedocument.wordprocessingml.document") ? M = this.options.images.successWordImage : i.type.match("video/*") && (M = this.options.images.successVideoImage);
       const g = `
     <svg class="image-preview-item-progress hide" width="30" height="30">
      <circle class="image-preview-item-progress-bar" r="10" cx="15" cy="15"></circle>
